@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · what the merged reports show'
 owner: support desk
-status: open
+status: closed
 reviewed: 2026-11-01
 signature: Przemyslaw Rogalski
 ---
@@ -13,13 +13,14 @@ signature: Przemyslaw Rogalski
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-[#4471](/kb/incidents/4471) is marked known: one bug, one fix queued. Read one report at a time,
-the ticket holds more than one bug. The desk merged on subject line alone
+[#4471](/kb/incidents/4471) was marked known: one bug, one fix queued. Read one report at a time,
+the ticket held more than one bug. Engineering closed it on 5 October. The desk merged on subject line alone
 ([decision 0001](/kb/decisions/0001-dedupe-by-subject)), and the subjects are the same for every
 problem below: "wrong day", "dates mixed up". The bodies are not.
 
-<Callout kind="warn">
-The queued parser fix closes only the parser bug. The other problems keep coming in after it ships.
+<Callout>
+Closed 5 October. Parser: fixed (`fix(dates): parse dd/mm for eu locales`). Form hint: won't fix,
+the booking-v3 form is retired. One-day move: no fix; reopen its ticket if these reports keep coming.
 </Callout>
 
 ## The count
@@ -31,23 +32,22 @@ and footnoted below the table.
 
 <CauseTable ticket={4471} />
 
-| problem | ticket |
-|---|---|
-| `parser`: day and month swap | [ai-training#1](https://github.com/rogasoft/ai-training/issues/1) |
-| `hint`: booking-v3 form tells people to type month first | [ai-training#2](https://github.com/rogasoft/ai-training/issues/2) |
-| one-day move: the footnoted reports | [ai-training#3](https://github.com/rogasoft/ai-training/issues/3) |
+| problem | ticket | outcome |
+|---|---|---|
+| `parser`: day and month swap | [ai-training#1](https://github.com/rogasoft/ai-training/issues/1) | fixed 5 Oct · closed |
+| `hint`: booking-v3 form tells people to type month first | [ai-training#2](https://github.com/rogasoft/ai-training/issues/2) | won't fix, form retired · closed |
+| one-day move: the footnoted reports | [ai-training#3](https://github.com/rogasoft/ai-training/issues/3) | no fix · closed, reopen if it recurs |
 
 ## The problems
 
 **`parser`: day and month swap.** The shared parser reads every date month first. All our tenants
 on file write the day first, so 7 April becomes 4 July. Where a report in this row names both
-dates, they are the same day and month, swapped. This is the bug #4471 was opened for, and the fix queued
-for it.
+dates, they are the same day and month, swapped. This is the bug #4471 was opened for. Fixed on 5 October.
 
 **`hint`: the booking-v3 form tells people to type month first.** Tenants on `booking-v3` show
 `MM/DD/YYYY` under the date field. Their people type what the hint says, and the form reads the
-date the tenant's way, day first. The parser fix does not touch this. The form's hint has to
-follow the tenant's locale. Only reports sent through the form of a `booking-v3` tenant are in
+date the tenant's way, day first. The parser fix does not touch this. Engineering retired the
+booking-v3 form instead of fixing the hint. Only reports sent through the form of a `booking-v3` tenant are in
 this row; the same tenants' app and email reports are parser reports.
 
 **`one-day`: the date moves by a day, it does not swap.** These reports describe a date that is
@@ -59,8 +59,7 @@ time zone or day-boundary bug in how invites are built. The desk notes these rep
 ## What to do on the desk
 
 - Point new reports at the row they match, not at #4471 by subject.
-- When the parser fix ships, keep #4471's count to its own row. A report about the form hint or a
-  one-day move is not "still broken after the fix"; it is a different ticket.
+- After the parser fix, a new one-day report is not "#4471 still broken": reopen ai-training#3.
 - Matching on subject merged three bugs into one count. Read the body before you merge.
 
 <RenderStamp {signature} />
