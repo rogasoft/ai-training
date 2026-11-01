@@ -8,7 +8,7 @@ signature: Przemyslaw Rogalski
 ---
 
 <script>
-  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
@@ -19,23 +19,23 @@ the ticket holds more than one bug. The desk merged on subject line alone
 problem below: "wrong day", "dates mixed up". The bodies are not.
 
 <Callout kind="warn">
-The queued parser fix closes only the first row. The other problems keep coming in after it ships.
+The queued parser fix closes only the parser bug. The other problems keep coming in after it ships.
 </Callout>
 
-## One row per problem
+## The count
 
-Counted from the ticket export at render time. Each report sits in exactly one row. Reports are
-placed by their tenant (locale and booking form, `causes.ts`), not by the intake tag, which is a
-guess from the reporter's browser.
+The desk's own view of the ticket, built from the export at render time. Reports are placed by
+their tenant (locale and booking form, `causes.ts`), not by the intake tag, which is a guess from
+the reporter's browser. The one-day reports are counted where the desk files them, under `parser`,
+and footnoted below the table.
 
-<ProblemTable
-  ticket={4471}
-  tickets={{
-    parser: { label: 'ai-training#1', href: 'https://github.com/rogasoft/ai-training/issues/1' },
-    hint: { label: 'ai-training#2', href: 'https://github.com/rogasoft/ai-training/issues/2' },
-    'one-day': { label: 'ai-training#3', href: 'https://github.com/rogasoft/ai-training/issues/3' },
-  }}
-/>
+<CauseTable ticket={4471} />
+
+| problem | ticket |
+|---|---|
+| `parser`: day and month swap | [ai-training#1](https://github.com/rogasoft/ai-training/issues/1) |
+| `hint`: booking-v3 form tells people to type month first | [ai-training#2](https://github.com/rogasoft/ai-training/issues/2) |
+| one-day move: the footnoted reports | [ai-training#3](https://github.com/rogasoft/ai-training/issues/3) |
 
 ## The problems
 
@@ -53,8 +53,8 @@ this row; the same tenants' app and email reports are parser reports.
 **`one-day`: the date moves by a day, it does not swap.** These reports describe a date that is
 one day early or late, a meeting that lands on different days for people in different cities, and
 an invite that arrives before the booking was made. No day and month are swapped. This reads as a
-time zone or day-boundary bug in how invites are built. The desk had noted these reports
-(`desk-notes.json`) but counted them under `parser`. The parser fix will not change them.
+time zone or day-boundary bug in how invites are built. The desk notes these reports
+(`desk-notes.json`) and counts them under `parser`, where its view footnotes them. The parser fix will not change them.
 
 ## What to do on the desk
 
